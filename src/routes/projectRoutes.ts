@@ -3,6 +3,7 @@ import { ProjectController } from '../controllers/ProjectController';
 import { TaskController } from '../controllers/TaskController';
 import { body, param } from 'express-validator';
 import { handleInputErrors } from '../middleware/validation';
+import { validateProjectExists } from '../middleware/projects';
 
 const router = Router();
 
@@ -53,6 +54,7 @@ router.post(
   // body('description').notEmpty().withMessage('Task description is required'),
   // handleInputErrors,
 
+  validateProjectExists,
   TaskController.createTask
 );
 
