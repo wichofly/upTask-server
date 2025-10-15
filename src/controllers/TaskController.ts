@@ -7,8 +7,7 @@ export class TaskController {
       const task = new Task(req.body);
       task.project = req.project.id; // Associate task with the project
       req.project.tasks.push(task.id); // Add task to the project's tasks array
-      await task.save();
-      await req.project.save();
+      await Promise.allSettled([task.save(), req.project.save()]); 
       res.send('Task created successfully');
     } catch (error) {
       console.log(error);
