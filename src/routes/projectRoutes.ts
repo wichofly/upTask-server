@@ -49,12 +49,11 @@ router.delete(
 /** Routes for tasks */
 router.post(
   '/:projectId/tasks',
-  // param('projectId').isMongoId().withMessage('Invalid project ID'),
-  // body('name').notEmpty().withMessage('Task name is required'),
-  // body('description').notEmpty().withMessage('Task description is required'),
-  // handleInputErrors,
-
   validateProjectExists,
+  body('name').notEmpty().withMessage('Task name is required'),
+  body('description').notEmpty().withMessage('Task description is required'),
+  
+  handleInputErrors,
   TaskController.createTask
 );
 
