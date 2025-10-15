@@ -1,5 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import Project from '../models/Project';
+import Project, { IProject } from '../models/Project';
+
+declare global {
+  namespace Express {
+    interface Request {
+      project: IProject;
+    }
+  }
+}
 
 export const validateProjectExists = async (
   req: Request,
@@ -10,6 +18,7 @@ export const validateProjectExists = async (
     const { projectId } = req.params;
     const project = await Project.findById(projectId);
     if (!project) return res.status(404).json({ message: 'Project not found' });
+    req.project = project; // Attach project to request object
     next();
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
