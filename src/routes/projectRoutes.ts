@@ -52,9 +52,15 @@ router.post(
   validateProjectExists,
   body('name').notEmpty().withMessage('Task name is required'),
   body('description').notEmpty().withMessage('Task description is required'),
-  
+
   handleInputErrors,
   TaskController.createTask
+);
+
+router.get(
+  '/:projectId/tasks',
+  validateProjectExists,
+  TaskController.getProjectTasks
 );
 
 export default router;
