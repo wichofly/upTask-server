@@ -31,11 +31,29 @@ export class TaskController {
     try {
       const task = await Task.findById(taskId);
       if (!task) return res.status(404).json({ error: 'Task not found' });
-      if (task.project.toString() !== req.project.id) // Verify task belongs to project. toString() to compare string with ObjectId
+      if (task.project.toString() !== req.project.id)
+        // Verify task belongs to project. toString() to compare string with ObjectId
         return res
           .status(400)
           .json({ error: 'Task does not belong to this project' });
       res.json(task);
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
+  static updateTask = async (req: Request, res: Response) => {
+    const { taskId } = req.params;
+
+    try {
+      const task = await Task.findByIdAndUpdate(taskId, req.body);
+      if (!task) return res.status(404).json({ error: 'Task not found' });
+      if (task.project.toString() !== req.project.id)
+        return res
+          .status(400)
+          .json({ error: 'Task does not belong to this project' });
+
+      res.json({ message: 'Task updated successfully' });
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
