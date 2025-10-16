@@ -58,4 +58,25 @@ export class TaskController {
       res.status(500).json({ error: 'Server error' });
     }
   };
+
+  static deleteTask = async (req: Request, res: Response) => {
+    const { taskId } = req.params;
+
+    try {
+      const task = await Task.findById(taskId);
+      if (!task) return res.status(404).json({ error: 'Task not found' });
+
+      // Remove task from project's tasks array
+      req.project.tasks = req.project.tasks.filter(
+        (t) => t.toString() !== taskId
+      );
+
+      // Delete task and save updated project simultaneously
+      await Promise.allSettled([task.deleteOne(), req.project.save()]);
+
+      res.json({ message: 'Task deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
 }
