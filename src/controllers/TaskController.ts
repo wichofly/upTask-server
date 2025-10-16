@@ -46,13 +46,16 @@ export class TaskController {
     const { taskId } = req.params;
 
     try {
-      const task = await Task.findByIdAndUpdate(taskId, req.body);
+      const task = await Task.findById(taskId);
       if (!task) return res.status(404).json({ error: 'Task not found' });
       if (task.project.toString() !== req.project.id)
         return res
           .status(400)
           .json({ error: 'Task does not belong to this project' });
 
+      task.name = req.body.name;
+      task.description = req.body.description;
+      await task.save();
       res.json({ message: 'Task updated successfully' });
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
