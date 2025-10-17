@@ -24,3 +24,16 @@ export const taskExists = async (
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+export const taskBelongsToProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.task.project.toString() !== req.project.id.toString())
+    // Verify task belongs to project. toString() to compare string with ObjectId
+    return res
+      .status(400)
+      .json({ error: 'Task does not belong to this project' });
+  next();
+};

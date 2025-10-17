@@ -27,11 +27,6 @@ export class TaskController {
 
   static getTaskById = async (req: Request, res: Response) => {
     try {
-      if (req.task.project.toString() !== req.project.id)
-        // Verify task belongs to project. toString() to compare string with ObjectId
-        return res
-          .status(400)
-          .json({ error: 'Task does not belong to this project' });
       res.json(req.task);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
@@ -40,11 +35,6 @@ export class TaskController {
 
   static updateTask = async (req: Request, res: Response) => {
     try {
-      if (req.task.project.toString() !== req.project.id)
-        return res
-          .status(400)
-          .json({ error: 'Task does not belong to this project' });
-
       req.task.name = req.body.name;
       req.task.description = req.body.description;
       await req.task.save();
