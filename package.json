@@ -1,11 +1,15 @@
 {
   "dependencies": {
+    "-": "^0.0.1",
+    "@types/morgan": "^1.9.10",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
+    "D": "^1.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
-    "mongoose": "^8.19.1"
+    "mongoose": "^8.19.1",
+    "morgan": "^1.10.1"
   },
   "name": "uptask-server",
   "version": "1.0.0",
