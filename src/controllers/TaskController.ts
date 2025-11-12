@@ -38,7 +38,7 @@ export class TaskController {
       req.task.name = req.body.name;
       req.task.description = req.body.description;
       await req.task.save();
-      res.json({ message: 'Task updated successfully' });
+      res.send('Task updated successfully');
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
@@ -54,7 +54,7 @@ export class TaskController {
       // Delete task and save updated project simultaneously
       await Promise.allSettled([req.task.deleteOne(), req.project.save()]);
 
-      res.json({ message: 'Task deleted successfully' });
+      res.send('Task deleted successfully');
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
@@ -66,7 +66,7 @@ export class TaskController {
     try {
       req.task.status = status;
       await req.task.save();
-      res.json({ message: 'Task status updated successfully' });
+      res.send('Task status updated successfully');
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }

@@ -7,7 +7,7 @@ export class ProjectController {
 
     try {
       await project.save();
-      res.json({ message: 'Project created successfully' });
+      res.send('Project created successfully');
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
@@ -47,7 +47,7 @@ export class ProjectController {
       project.clientName = req.body.clientName;
       project.description = req.body.description;
       await project.save();
-      res.json({ message: 'Project updated successfully' });
+      res.send('Project updated successfully');
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
@@ -61,7 +61,7 @@ export class ProjectController {
 
       if (!project) return res.status(404).json({ error: 'Project not found' });
       await project.deleteOne();
-      res.json({ message: 'Project deleted successfully' });
+      res.send('Project deleted successfully');
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
