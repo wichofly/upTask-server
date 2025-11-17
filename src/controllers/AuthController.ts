@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
 import User from '../models/User';
+import { hashPassword } from '../utils/auth';
 
 export class AuthController {
   static createAccount = async (req: Request, res: Response) => {
     try {
+      const { password } = req.body;
       const user = new User(req.body);
 
-      // hash password
-      const salt = await bcrypt.genSalt(10)
-      user.password = await bcrypt.hash(req.body.password, salt)
+      // Hash password
+      user.password = await hashPassword(password);
 
       await user.save();
       res.send(
