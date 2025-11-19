@@ -30,7 +30,7 @@ export class AuthController {
       // Send an email with token
       AuthEmail.sendConfirmationEmail({
         email: user.email,
-        name: user.name, 
+        name: user.name,
         token: token.token,
       });
 
@@ -39,6 +39,29 @@ export class AuthController {
       res.send(
         'Account created successfully, check your email to confirm your account'
       );
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
+  static confirmAccount = async (req: Request, res: Response) => {
+    try {
+      const { token } = req.body;
+
+      // Validate token
+      const tokenExists = await Token.findOne({ token });
+      if (!tokenExists) {
+        return res.status(401).json({ error: 'Invalid token' });
+      }
+
+      // Confirm the user's account
+      const user = await User.findById(tokenExists.user);
+      user.confirmed = true;
+
+      // Delete the token after confirmation
+      await Promise.allSettled([user.save(), tokenExists.deleteOne()]);
+
+      res.send('Account confirmed successfully');
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
