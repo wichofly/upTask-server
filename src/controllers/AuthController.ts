@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
-import { hashPassword } from '../utils/auth';
+import { comparePassword, hashPassword } from '../utils/auth';
 import { generateToken } from '../utils/token';
 import Token from '../models/Token';
 import { AuthEmail } from '../emails/AuthEmail';
@@ -51,7 +51,7 @@ export class AuthController {
       // Validate token
       const tokenExists = await Token.findOne({ token });
       if (!tokenExists) {
-        return res.status(401).json({ error: 'Invalid token' });
+        return res.status(404).json({ error: 'Invalid token' });
       }
 
       // Confirm the user's account
@@ -62,6 +62,42 @@ export class AuthController {
       await Promise.allSettled([user.save(), tokenExists.deleteOne()]);
 
       res.send('Account confirmed successfully');
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
+  static login = async (req: Request, res: Response) => {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      if (!user.confirmed) {
+        const token = new Token();
+        token.token = generateToken();
+        token.user = user.id;
+        await token.save();
+
+        AuthEmail.sendConfirmationEmail({
+          email: user.email,
+          name: user.name,
+          token: token.token,
+        });
+
+        return res.status(401).json({
+          error: 'Account not confirmed, confirmation code sent to email',
+        });
+      }
+
+      const isPasswordValid = await comparePassword(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Invalid password' });
+      }
+
+      res.send('Login successful');
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
