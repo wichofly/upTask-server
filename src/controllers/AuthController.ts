@@ -166,4 +166,42 @@ export class AuthController {
       res.status(500).json({ error: 'Server error' });
     }
   };
+
+  static validateToken = async (req: Request, res: Response) => {
+    try {
+      const { token } = req.body;
+
+      // Validate token
+      const tokenExists = await Token.findOne({ token });
+      if (!tokenExists) {
+        return res.status(404).json({ error: 'Invalid token' });
+      }
+
+      res.send('Token is valid, proceed to reset password');
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
+  static updatePasswordWithToken = async (req: Request, res: Response) => {
+    try {
+      const { token } = req.params; // Get token from URL parameters
+      const { password } = req.body;
+
+      // Validate token
+      const tokenExists = await Token.findOne({ token });
+      if (!tokenExists) {
+        return res.status(404).json({ error: 'Invalid token' });
+      }
+
+      const user = await User.findById(tokenExists); // Find user by token's user reference
+      user.password = await hashPassword(password); // Hash new password
+
+      await Promise.allSettled([user.save(), tokenExists.deleteOne()]); // Save user and delete token
+
+      res.send('Password has been successfully updated');
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
 }
