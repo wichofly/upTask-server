@@ -194,7 +194,7 @@ export class AuthController {
         return res.status(404).json({ error: 'Invalid token' });
       }
 
-      const user = await User.findById(tokenExists); // Find user by token's user reference
+      const user = await User.findById(tokenExists.user); // Find user by token's user ID
       user.password = await hashPassword(password); // Hash new password
 
       await Promise.allSettled([user.save(), tokenExists.deleteOne()]); // Save user and delete token

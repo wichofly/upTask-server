@@ -1,17 +1,24 @@
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
 
-dotenv.config();
+let transporter: nodemailer.Transporter;
 
-const config = () => {
-  return {
-    host: process.env.SMTP_HOST,
-    port: +process.env.SMTP_PORT, // Convert to number
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  };
+export const getTransporter = async () => {
+  if (!transporter) {
+    const testAccount = await nodemailer.createTestAccount();
+
+    transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      auth: {
+        user: testAccount.user,
+        pass: testAccount.pass,
+      },
+    });
+
+    console.log('📧 Ethereal account generated:');
+    console.log('User:', testAccount.user);
+    console.log('Pass:', testAccount.pass);
+  }
+
+  return transporter;
 };
-
-export const transporter = nodemailer.createTransport(config());

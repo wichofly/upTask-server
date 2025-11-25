@@ -1,4 +1,5 @@
-import { transporter } from '../config/nodemailer';
+import nodemailer from 'nodemailer';
+import { getTransporter } from '../config/nodemailer';
 
 interface IEmail {
   email: string;
@@ -8,6 +9,8 @@ interface IEmail {
 
 export class AuthEmail {
   static sendConfirmationEmail = async (user: IEmail) => {
+    const transporter = await getTransporter();
+
     const info = await transporter.sendMail({
       from: '"UpTask" <no-reply@uptask.com>',
       to: user.email,
@@ -19,10 +22,12 @@ export class AuthEmail {
              <p>This link will expire in 10 minutes.</p>
              `,
     });
-    console.log('Email sent', info.messageId);
+    console.log('Preview URL:', nodemailer.getTestMessageUrl(info));
   };
 
   static sendPasswordResetToken = async (user: IEmail) => {
+    const transporter = await getTransporter();
+
     const info = await transporter.sendMail({
       from: '"UpTask" <no-reply@uptask.com>',
       to: user.email,
@@ -34,6 +39,6 @@ export class AuthEmail {
              <p>This link will expire in 10 minutes.</p>
              `,
     });
-    console.log('Email sent', info.messageId);
+    console.log('Preview URL:', nodemailer.getTestMessageUrl(info));
   };
 }
