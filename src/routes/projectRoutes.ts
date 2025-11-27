@@ -5,11 +5,14 @@ import { body, param } from 'express-validator';
 import { handleInputErrors } from '../middleware/validation';
 import { projectExists } from '../middleware/project';
 import { taskBelongsToProject, taskExists } from '../middleware/task';
+import { authenticateUser } from '../middleware/auth';
 
 const router = Router();
 
 router.post(
   '/',
+  authenticateUser,
+
   body('projectName').notEmpty().withMessage('Project name is required'),
   body('clientName').notEmpty().withMessage('Client name is required'),
   body('description')
