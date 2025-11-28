@@ -9,10 +9,9 @@ import { authenticateUser } from '../middleware/auth';
 
 const router = Router();
 
+router.use(authenticateUser);
 router.post(
   '/',
-  authenticateUser,
-
   body('projectName').notEmpty().withMessage('Project name is required'),
   body('clientName').notEmpty().withMessage('Client name is required'),
   body('description')
@@ -23,7 +22,7 @@ router.post(
   ProjectController.createProject
 );
 
-router.get('/', authenticateUser, ProjectController.getAllProjects);
+router.get('/', ProjectController.getAllProjects);
 
 router.get(
   '/:id',
