@@ -33,6 +33,11 @@ export class ProjectController {
       const project = await Project.findById(id).populate('tasks');
 
       if (!project) return res.status(404).json({ error: 'Project not found' });
+
+      if (project.manager.toString() !== req.user.id.toString()) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+
       res.json(project);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
