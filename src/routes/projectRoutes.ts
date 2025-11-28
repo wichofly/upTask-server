@@ -9,7 +9,7 @@ import { authenticateUser } from '../middleware/auth';
 
 const router = Router();
 
-router.use(authenticateUser);
+router.use(authenticateUser); // Apply authentication middleware to all routes below
 router.post(
   '/',
   body('projectName').notEmpty().withMessage('Project name is required'),
