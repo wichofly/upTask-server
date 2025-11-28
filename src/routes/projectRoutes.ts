@@ -23,7 +23,7 @@ router.post(
   ProjectController.createProject
 );
 
-router.get('/', ProjectController.getAllProjects);
+router.get('/', authenticateUser, ProjectController.getAllProjects);
 
 router.get(
   '/:id',

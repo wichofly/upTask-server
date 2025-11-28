@@ -17,7 +17,9 @@ export class ProjectController {
 
   static getAllProjects = async (req: Request, res: Response) => {
     try {
-      const projects = await Project.find({}); // Fetch all projects
+      const projects = await Project.find({
+        $or: [{ manager: { $in: req.user.id } }], // Include projects managed by the user
+      });
       res.json(projects);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
