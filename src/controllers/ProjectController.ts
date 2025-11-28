@@ -5,7 +5,7 @@ export class ProjectController {
   static createProject = async (req: Request, res: Response) => {
     const project = new Project(req.body);
 
-    console.log(req.user);
+    project.manager = req.user.id; // Assign the authenticated user's ID as the manager
 
     try {
       await project.save();

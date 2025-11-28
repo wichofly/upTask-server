@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Types, PopulatedDoc } from 'mongoose';
 import { ITask } from './Task';
+import { IUser } from './User';
 
 // Define for TypeScript
 export interface IProject extends Document {
@@ -7,6 +8,7 @@ export interface IProject extends Document {
   clientName: string;
   description: string;
   tasks: PopulatedDoc<ITask & Document>[]; // There are multiple tasks in a project in an array
+  manager: PopulatedDoc<IUser & Document>;
 }
 
 // Define for Mongoose
@@ -28,6 +30,7 @@ const ProjectSchema: Schema = new Schema(
       trim: true,
     },
     tasks: [{ type: Types.ObjectId, ref: 'Task' }],
+    manager: { type: Types.ObjectId, ref: 'User' },
   },
   { timestamps: true } // Automatically manage createdAt and updatedAt fields
 );
