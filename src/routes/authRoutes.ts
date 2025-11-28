@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { body, param } from 'express-validator';
 import { AuthController } from '../controllers/AuthController';
 import { handleInputErrors } from '../middleware/validation';
+import { authenticateUser } from '../middleware/auth';
 
 const router = Router();
 
@@ -74,5 +75,7 @@ router.post(
   handleInputErrors,
   AuthController.updatePasswordWithToken
 );
+
+router.get('/user-profile', authenticateUser, AuthController.userProfile)
 
 export default router;

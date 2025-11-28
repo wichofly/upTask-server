@@ -5,9 +5,11 @@ import { body, param } from 'express-validator';
 import { handleInputErrors } from '../middleware/validation';
 import { projectExists } from '../middleware/project';
 import { taskBelongsToProject, taskExists } from '../middleware/task';
+import { authenticateUser } from '../middleware/auth';
 
 const router = Router();
 
+router.use(authenticateUser); // Apply authentication middleware to all routes below
 router.post(
   '/',
   body('projectName').notEmpty().withMessage('Project name is required'),
