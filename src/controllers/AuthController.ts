@@ -207,4 +207,8 @@ export class AuthController {
       res.status(500).json({ error: 'Server error' });
     }
   };
+
+  static userProfile = async (req: Request, res: Response) => {
+    return res.json({ user: req.user });
+  }
 }
