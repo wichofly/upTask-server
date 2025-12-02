@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
+import Project from '../models/Project';
 
 export class TeamMemberController {
   static findMemberByEmail = async (req: Request, res: Response) => {
@@ -38,6 +39,20 @@ export class TeamMemberController {
       await req.project.save();
 
       res.send('Team member added successfully');
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
+  static getProjectTeam = async (req: Request, res: Response) => {
+    try {
+      const project = await Project.findById(req.project.id).populate(
+        'team',
+        'email name'
+      );
+      if (!project) return res.status(404).json({ error: 'Project not found' });
+
+      res.json(project.team);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
     }
