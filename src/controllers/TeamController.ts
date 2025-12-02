@@ -42,4 +42,25 @@ export class TeamMemberController {
       res.status(500).json({ error: 'Server error' });
     }
   };
+
+  static removeMemberById = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.body;
+
+      // Check if user is not a team member
+      if (!req.project.team.some((member) => member.toString() === id)) {
+        return res.status(409).json({ error: 'User is not a team member' });
+      }
+
+      // Remove the user from the project's team
+      req.project.team = req.project.team.filter(
+        (member) => member.toString() !== id
+      );
+      await req.project.save();
+
+      res.send('Team member removed successfully');
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
 }
