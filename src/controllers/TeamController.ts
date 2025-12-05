@@ -60,16 +60,16 @@ export class TeamMemberController {
 
   static removeMemberById = async (req: Request, res: Response) => {
     try {
-      const { id } = req.body;
+      const { userId } = req.params;
 
       // Check if user is not a team member
-      if (!req.project.team.some((member) => member.toString() === id)) {
+      if (!req.project.team.some((member) => member.toString() === userId)) {
         return res.status(409).json({ error: 'User is not a team member' });
       }
 
       // Remove the user from the project's team
       req.project.team = req.project.team.filter(
-        (member) => member.toString() !== id
+        (member) => member.toString() !== userId
       );
       await req.project.save();
 

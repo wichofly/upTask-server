@@ -124,8 +124,8 @@ router.get(
 );
 
 router.delete(
-  '/:projectId/team',
-  body('id').isMongoId().withMessage('Invalid user ID'),
+  '/:projectId/team/:userId',
+  param('userId').isMongoId().withMessage('Invalid user ID'),
   handleInputErrors,
   TeamMemberController.removeMemberById
 );
