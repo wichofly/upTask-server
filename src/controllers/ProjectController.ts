@@ -18,7 +18,10 @@ export class ProjectController {
   static getAllProjects = async (req: Request, res: Response) => {
     try {
       const projects = await Project.find({
-        $or: [{ manager: { $in: req.user.id } }], // Include projects managed by the user
+        $or: [
+          { manager: { $in: req.user.id } }, // Include projects managed by the manager
+          { team: { $in: req.user.id } }, // Include projects where the user is a team member
+        ],
       });
       res.json(projects);
     } catch (error) {
@@ -34,7 +37,10 @@ export class ProjectController {
 
       if (!project) return res.status(404).json({ error: 'Project not found' });
 
-      if (project.manager.toString() !== req.user.id.toString()) {
+      if (
+        project.manager.toString() !== req.user.id.toString() &&
+        !project.team.includes(req.user.id)
+      ) {
         return res.status(403).json({ error: 'Access denied' });
       }
 

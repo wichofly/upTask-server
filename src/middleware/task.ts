@@ -37,3 +37,13 @@ export const taskBelongsToProject = async (
       .json({ error: 'Task does not belong to this project' });
   next();
 };
+
+export const hasAuthorizationOnTask = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.project.manager.toString() !== req.user.id.toString())
+    return res.status(403).json({ error: 'Unauthorized' });
+  next();
+};
