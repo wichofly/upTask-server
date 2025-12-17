@@ -69,11 +69,12 @@ export class TaskController {
       const { status } = req.body;
       req.task.status = status;
 
-      if (status === 'pending') {
-        req.task.completedBy = null;
-      } else {
-        req.task.completedBy = req.user.id; // Assuming req.user contains the authenticated user
-      }
+      const data = {
+        user: req.user.id, // Assuming req.user contains the authenticated user
+        status,
+      };
+
+      req.task.completedBy.push(data); // Append to completedBy array
 
       await req.task.save();
       res.send('Task status updated successfully');
