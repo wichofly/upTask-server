@@ -121,6 +121,9 @@ export class AuthController {
         return res.status(403).json({ error: 'Account is already confirmed' });
       }
 
+      // Delete any existing tokens for this user before creating a new one
+      await Token.deleteMany({ user: user.id });
+
       // Generate confirmation token
       const token = new Token();
       token.token = generateToken();
@@ -150,6 +153,9 @@ export class AuthController {
       if (!user) {
         return res.status(404).json({ error: 'User is not registered' });
       }
+
+      // Delete any existing tokens for this user before creating a new one
+      await Token.deleteMany({ user: user.id });
 
       // Generate confirmation token
       const token = new Token();
