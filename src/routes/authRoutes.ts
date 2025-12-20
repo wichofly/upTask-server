@@ -64,18 +64,18 @@ router.post(
 
 router.post(
   '/update-password/:token',
-  param('token').isNumeric().withMessage('Valid token is required'),
+  param('token').notEmpty().withMessage('Valid token is required'),
   body('password')
     .isLength({ min: 8 })
     .withMessage('Password must be at least 8 characters long'),
   body('confirmPassword')
     .custom((value, { req }) => value === req.body.password)
     .withMessage('Passwords do not match'),
-    
+
   handleInputErrors,
   AuthController.updatePasswordWithToken
 );
 
-router.get('/user-profile', authenticateUser, AuthController.userProfile)
+router.get('/user-profile', authenticateUser, AuthController.userProfile);
 
 export default router;
