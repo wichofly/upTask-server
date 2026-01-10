@@ -97,6 +97,15 @@ router.post(
   AuthController.updateCurrentUserPassword
 );
 
+router.post(
+  '/check-password',
+  authenticateUser,
+  body('password').notEmpty().withMessage('Password is required'),
+  
+  handleInputErrors,
+  AuthController.checkPassword
+);
+
 router.put(
   '/profile',
   authenticateUser,
