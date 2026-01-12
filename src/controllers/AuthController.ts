@@ -217,4 +217,61 @@ export class AuthController {
   static userProfile = async (req: Request, res: Response) => {
     return res.json(req.user);
   };
+
+  static updateCurrentUserPassword = async (req: Request, res: Response) => {
+    try {
+      const { currentPassword, password } = req.body;
+
+      const user = await User.findById(req.user.id);
+
+      const isPasswordCorrect = await comparePassword(
+        currentPassword,
+        user.password
+      );
+
+      if (!isPasswordCorrect)
+        return res.status(401).json({ error: 'Current password is incorrect' });
+
+      user.password = await hashPassword(password);
+      await user.save();
+      res.send('Password updated successfully');
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
+  static checkPassword = async (req: Request, res: Response) => {
+    try {
+      const { password } = req.body;
+
+      const user = await User.findById(req.user.id);
+
+      const isPasswordCorrect = await comparePassword(password, user.password);
+
+      if (!isPasswordCorrect)
+        return res.status(401).json({ error: 'Password is incorrect' });
+
+      res.send('Password is correct');
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
+  static updateProfile = async (req: Request, res: Response) => {
+    try {
+      const { name, email } = req.body;
+
+      const userExists = await User.findOne({ email });
+      if (userExists && userExists.id.toString() !== req.user.id.toString())
+        return res.status(409).json({ error: 'Email already in use' });
+
+      req.user.name = name;
+      req.user.email = email;
+
+      await req.user.save();
+      res.send('Profile updated successfully');
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
 }
