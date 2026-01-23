@@ -19,9 +19,9 @@ app.use(morgan('dev')); // HTTP request logger
 
 app.use(express.json()); // Middleware to parse JSON
 
-app.use('/', (req, res) => {
-  res.send('Welcome to the upTask API');
-});
+// app.use('/', (req, res) => {
+//   res.send('Welcome to the upTask API');
+// });
 
 // Routes
 app.use('/api/auth', authRoutes);
