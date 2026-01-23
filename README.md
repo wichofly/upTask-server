@@ -82,4 +82,4 @@ Frontend:
 Project deployed at Vercel: [UpTask Client](https://up-task-client-two.vercel.app)
 
 Backend:
-Project deployed at Render: [Backend API](https://uptask-server-4lcj.onrender.com/api)
+Project deployed at Render: [Backend API](https://uptask-server-4lcj.onrender.com)
