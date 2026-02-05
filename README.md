@@ -1,23 +1,23 @@
 # UpTask API - Project Management Backend
 
 UpTask API is the backend service that powers the UpTask project management platform.
-It exposes a RESTful API for authentication, project management, task workflows, and team collaboration.
+It exposes a RESTful REST API for authentication, project management, task workflows, and team collaboration.
 
-The service is built with Node.js and Express and connects to MongoDB Atlas for data persistence.
-Authentication is handled through JSON Web Tokens (JWT), and routes are protected with middleware.
+The service is built with Node.js, Express, and TypeScript, and connects to MongoDB Atlas for persistent storage.
 
-The API also includes a transactional email system used for account confirmation and password recovery flows.
-Emails are generated using Nodemailer and sent through [Ethereal](https://ethereal.email/) for development and testing purposes.
+Authentication is handled through JSON Web Tokens (JWT), and routes are protected via middleware-based authorization.
 
-The backend is deployed independently from the frontend and configured for production using environment variables.
+The backend also includes a production-ready transactional email system for account confirmation and password recovery flows, integrated through [Brevo SMTP](https://app.brevo.com/).
+
+The service is deployed independently from the frontend and configured through environment variables for cloud environments.
 
 ## Core Features
 
 #### Authentication
 
 - User registration with email verification
-- Login endpoint issuing JWT tokens
-- Password recovery and reset flow
+- JWT-based login flow
+- Password recovery and reset via email
 - Token validation middleware
 - Protected user profile route
 - Secure password hashing with bcrypt
@@ -25,18 +25,18 @@ The backend is deployed independently from the frontend and configured for produ
 #### Project & Team Management
 
 - CRUD operations for projects
-- Assign collaborators by email
+- Collaborator invitations via email
 - Role-based permissions (manager vs collaborator)
 - Server-side authorization checks
-- Secure project access enforcement
+- Secure project-level access enforcement
 
 ### Task Workflow Engine
 
 - Create and assign tasks to project
 - Status transitions with audit history
-- Task deletion and updates
+- Task updates and deletion
 - Activity log per task
-- Notes/comments system
+- Notes and comments system
 
 #### Security & Middleware
 
@@ -44,7 +44,7 @@ The backend is deployed independently from the frontend and configured for produ
 - Route-level authentication enforcement
 - Centralized error handler
 - CORS configuration for production
-- Request logging with Morgan
+- HTTP request logging with Morgan
 
 ## Technologies Used
 
@@ -60,26 +60,32 @@ The backend is deployed independently from the frontend and configured for produ
 - Morgan
 - Nodemailer
 - Ethereal Email
+- Brevo SMTP
 
 ## Key Technologies Explained
 
-- **Express** keeps routing modular and simple.
-- **MongoDB Atlas** provides a scalable cloud database for project documents.
-- **JWT** enables stateless authentication between services.
+- **Express** provides modular routing and middleware composition.
+- **MongoDB Atlas** offers a scalable cloud database for document storage.
+- **JWT** enables stateless authentication between client and server.
 - **Mongoose** enforces schemas and relations across collections.
 - **bcrypt** secures stored passwords.
-- **Nodemailer** handles SMTP communication and transactional emails.
+- **Nodemailer** handles SMTP-based email delivery.
 - **Ethereal** is used for development and testing because it allows email flows to be verified without sending real messages.
+- **Brevo SMTP** powers production-grade transactional email flows.
 - **cors** allows controlled frontend access.
 
 ## Frontend Integration
 
-This backend is directly connected to the frontend repository at: [UpTask Client](https://github.com/wichofly/upTask-client)
+This backend connects directly to the frontend repository:
+
+[UpTask Client](https://github.com/wichofly/upTask-client)
 
 ## Deployment
 
-Frontend:
-Project deployed at Vercel: [UpTask Client](https://up-task-client-two.vercel.app)
+Frontend deployed on Vercel:
 
-Backend:
-Project deployed at Render: [Backend API](https://uptask-server-4lcj.onrender.com)
+[UpTask Client](https://up-task-client-two.vercel.app)
+
+Backend deployed on Render:
+
+[Backend API](https://uptask-server-4lcj.onrender.com)
