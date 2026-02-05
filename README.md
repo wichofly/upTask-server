@@ -78,7 +78,7 @@ The service is deployed independently from the frontend and configured through e
 
 This backend connects directly to the frontend repository:
 
-[UpTask Client](https://github.com/wichofly/upTask-client)
+[UpTask Client Repository](https://github.com/wichofly/upTask-client)
 
 ## Deployment
 
