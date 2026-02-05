@@ -4,20 +4,16 @@ let transporter: nodemailer.Transporter;
 
 export const getTransporter = async () => {
   if (!transporter) {
-    const testAccount = await nodemailer.createTestAccount();
-
     transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: false,
+      requireTLS: true,
       auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
-
-    console.log('📧 Ethereal account generated:');
-    console.log('User:', testAccount.user);
-    console.log('Pass:', testAccount.pass);
   }
 
   return transporter;

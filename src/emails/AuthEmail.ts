@@ -1,4 +1,3 @@
-import nodemailer from 'nodemailer';
 import { getTransporter } from '../config/nodemailer';
 
 interface IEmail {
@@ -11,8 +10,12 @@ export class AuthEmail {
   static sendConfirmationEmail = async (user: IEmail) => {
     const transporter = await getTransporter();
 
-    const info = await transporter.sendMail({
-      from: '"UpTask" <no-reply@uptask.com>',
+    if (!process.env.FRONTEND_URL) {
+      throw new Error('FRONTEND_URL is not defined in environment variables');
+    }
+
+    await transporter.sendMail({
+      from: `"UpTask" <${process.env.SMTP_USER}>`,
       to: user.email,
       subject: 'Confirm your account',
       text: `UpTask - Confirm your account`,
@@ -22,14 +25,17 @@ export class AuthEmail {
              <p>This link will expire in 10 minutes.</p>
              `,
     });
-    console.log('Preview URL:', nodemailer.getTestMessageUrl(info));
   };
 
   static sendPasswordResetToken = async (user: IEmail) => {
     const transporter = await getTransporter();
 
-    const info = await transporter.sendMail({
-      from: '"UpTask" <no-reply@uptask.com>',
+    if (!process.env.FRONTEND_URL) {
+      throw new Error('FRONTEND_URL is not defined in environment variables');
+    }
+
+    await transporter.sendMail({
+      from: `"UpTask" <${process.env.SMTP_USER}>`,
       to: user.email,
       subject: 'Reset your password',
       text: `UpTask - Reset your password`,
@@ -39,6 +45,5 @@ export class AuthEmail {
              <p>This link will expire in 10 minutes.</p>
              `,
     });
-    console.log('Preview URL:', nodemailer.getTestMessageUrl(info));
   };
 }
