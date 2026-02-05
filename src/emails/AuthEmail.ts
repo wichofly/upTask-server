@@ -15,7 +15,7 @@ export class AuthEmail {
     }
 
     await transporter.sendMail({
-      from: `"UpTask" <${process.env.SMTP_USER}>`,
+      from: `"UpTask" <${process.env.SMTP_FROM}>`,
       to: user.email,
       subject: 'Confirm your account',
       text: `UpTask - Confirm your account`,
@@ -35,7 +35,7 @@ export class AuthEmail {
     }
 
     await transporter.sendMail({
-      from: `"UpTask" <${process.env.SMTP_USER}>`,
+      from: `"UpTask" <${process.env.SMTP_FROM}>`,
       to: user.email,
       subject: 'Reset your password',
       text: `UpTask - Reset your password`,
