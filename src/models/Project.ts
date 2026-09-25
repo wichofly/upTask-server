@@ -1,7 +1,7 @@
-import mongoose, { Schema, Document, Types, PopulatedDoc } from 'mongoose';
+import mongoose, { Document, PopulatedDoc, Schema, Types } from 'mongoose';
+import Note from './Note';
 import Task, { ITask } from './Task';
 import { IUser } from './User';
-import Note from './Note';
 
 // Define for TypeScript
 export interface IProject extends Document {

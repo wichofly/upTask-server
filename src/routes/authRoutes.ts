@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { body, param } from 'express-validator';
 import { AuthController } from '../controllers/AuthController';
-import { handleInputErrors } from '../middleware/validation';
 import { authenticateUser } from '../middleware/auth';
+import { handleInputErrors } from '../middleware/validation';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.post(
     .withMessage('Passwords do not match'),
 
   handleInputErrors,
-  AuthController.createAccount
+  AuthController.createAccount,
 );
 
 router.post(
@@ -26,7 +26,7 @@ router.post(
   body('token').notEmpty().withMessage('Token is required'),
 
   handleInputErrors,
-  AuthController.confirmAccount
+  AuthController.confirmAccount,
 );
 
 router.post(
@@ -35,7 +35,7 @@ router.post(
   body('password').notEmpty().withMessage('Password is required'),
 
   handleInputErrors,
-  AuthController.login
+  AuthController.login,
 );
 
 router.post(
@@ -43,7 +43,7 @@ router.post(
   body('email').isEmail().withMessage('Valid email is required'),
 
   handleInputErrors,
-  AuthController.requestConfirmationCode
+  AuthController.requestConfirmationCode,
 );
 
 router.post(
@@ -51,7 +51,7 @@ router.post(
   body('email').isEmail().withMessage('Valid email is required'),
 
   handleInputErrors,
-  AuthController.forgotPassword
+  AuthController.forgotPassword,
 );
 
 router.post(
@@ -59,7 +59,7 @@ router.post(
   body('token').notEmpty().withMessage('Token is required'),
 
   handleInputErrors,
-  AuthController.validateToken
+  AuthController.validateToken,
 );
 
 router.post(
@@ -73,7 +73,7 @@ router.post(
     .withMessage('Passwords do not match'),
 
   handleInputErrors,
-  AuthController.updatePasswordWithToken
+  AuthController.updatePasswordWithToken,
 );
 
 router.get('/user-profile', authenticateUser, AuthController.userProfile);
@@ -94,16 +94,16 @@ router.post(
     .withMessage('Passwords do not match'),
 
   handleInputErrors,
-  AuthController.updateCurrentUserPassword
+  AuthController.updateCurrentUserPassword,
 );
 
 router.post(
   '/check-password',
   authenticateUser,
   body('password').notEmpty().withMessage('Password is required'),
-  
+
   handleInputErrors,
-  AuthController.checkPassword
+  AuthController.checkPassword,
 );
 
 router.put(
@@ -113,7 +113,7 @@ router.put(
   body('email').isEmail().withMessage('Valid email is required'),
 
   handleInputErrors,
-  AuthController.updateProfile
+  AuthController.updateProfile,
 );
 
 export default router;

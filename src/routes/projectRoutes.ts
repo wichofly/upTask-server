@@ -1,17 +1,17 @@
 import { Router } from 'express';
+import { body, param } from 'express-validator';
+import { NoteController } from '../controllers/NoteController';
 import { ProjectController } from '../controllers/ProjectController';
 import { TaskController } from '../controllers/TaskController';
-import { body, param } from 'express-validator';
-import { handleInputErrors } from '../middleware/validation';
+import { TeamMemberController } from '../controllers/TeamController';
+import { authenticateUser } from '../middleware/auth';
 import { projectExists } from '../middleware/project';
 import {
-  taskExists,
-  taskBelongsToProject,
   hasAuthorizationOnTask,
+  taskBelongsToProject,
+  taskExists,
 } from '../middleware/task';
-import { authenticateUser } from '../middleware/auth';
-import { TeamMemberController } from '../controllers/TeamController';
-import { NoteController } from '../controllers/NoteController';
+import { handleInputErrors } from '../middleware/validation';
 
 const router = Router();
 
@@ -25,7 +25,7 @@ router.post(
     .withMessage('Description of the project is required'),
 
   handleInputErrors,
-  ProjectController.createProject
+  ProjectController.createProject,
 );
 
 router.get('/', ProjectController.getAllProjects);
@@ -34,7 +34,7 @@ router.get(
   '/:id',
   param('id').isMongoId().withMessage('Invalid project ID'),
   handleInputErrors,
-  ProjectController.getProjectById
+  ProjectController.getProjectById,
 );
 
 router.put(
@@ -45,14 +45,14 @@ router.put(
   body('description').notEmpty().withMessage('Description cannot be empty'),
 
   handleInputErrors,
-  ProjectController.updateProject
+  ProjectController.updateProject,
 );
 
 router.delete(
   '/:id',
   param('id').isMongoId().withMessage('Invalid project ID'),
   handleInputErrors,
-  ProjectController.deleteProject
+  ProjectController.deleteProject,
 );
 
 /** Routes for tasks */
@@ -65,7 +65,7 @@ router.post(
   body('description').notEmpty().withMessage('Task description is required'),
 
   handleInputErrors,
-  TaskController.createTask
+  TaskController.createTask,
 );
 
 router.get('/:projectId/tasks', TaskController.getProjectTasks);
@@ -77,7 +77,7 @@ router.get(
   '/:projectId/tasks/:taskId',
   param('taskId').isMongoId().withMessage('Invalid task ID'),
   handleInputErrors,
-  TaskController.getTaskById
+  TaskController.getTaskById,
 );
 
 router.put(
@@ -90,7 +90,7 @@ router.put(
     .withMessage('Task description cannot be empty'),
 
   handleInputErrors,
-  TaskController.updateTask
+  TaskController.updateTask,
 );
 
 router.delete(
@@ -98,7 +98,7 @@ router.delete(
   hasAuthorizationOnTask,
   param('taskId').isMongoId().withMessage('Invalid task ID'),
   handleInputErrors,
-  TaskController.deleteTask
+  TaskController.deleteTask,
 );
 
 router.post(
@@ -106,7 +106,7 @@ router.post(
   param('taskId').isMongoId().withMessage('Invalid task ID'),
   body('status').notEmpty().withMessage('Status is required'),
   handleInputErrors,
-  TaskController.updateTaskStatus
+  TaskController.updateTaskStatus,
 );
 
 /** Routes for teams */
@@ -115,27 +115,27 @@ router.post(
   '/:projectId/team/find',
   body('email').isEmail().toLowerCase().withMessage('Invalid email'),
   handleInputErrors,
-  TeamMemberController.findMemberByEmail
+  TeamMemberController.findMemberByEmail,
 );
 
 router.post(
   '/:projectId/team',
   body('id').isMongoId().withMessage('Invalid user ID'),
   handleInputErrors,
-  TeamMemberController.addMemberById
+  TeamMemberController.addMemberById,
 );
 
 router.get(
   '/:projectId/team',
   handleInputErrors,
-  TeamMemberController.getProjectTeam
+  TeamMemberController.getProjectTeam,
 );
 
 router.delete(
   '/:projectId/team/:userId',
   param('userId').isMongoId().withMessage('Invalid user ID'),
   handleInputErrors,
-  TeamMemberController.removeMemberById
+  TeamMemberController.removeMemberById,
 );
 
 /** Routes for notes */
@@ -143,7 +143,7 @@ router.post(
   '/:projectId/tasks/:taskId/notes',
   body('content').notEmpty().withMessage('Note content is required'),
   handleInputErrors,
-  NoteController.createNote
+  NoteController.createNote,
 );
 
 router.get('/:projectId/tasks/:taskId/notes', NoteController.getTaskNotes);
@@ -152,7 +152,7 @@ router.delete(
   '/:projectId/tasks/:taskId/notes/:noteId',
   param('noteId').isMongoId().withMessage('Invalid note ID'),
   handleInputErrors,
-  NoteController.deleteNote
+  NoteController.deleteNote,
 );
 
 export default router;

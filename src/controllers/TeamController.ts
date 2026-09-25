@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import User from '../models/User';
 import Project from '../models/Project';
+import User from '../models/User';
 
 export class TeamMemberController {
   static findMemberByEmail = async (req: Request, res: Response) => {
